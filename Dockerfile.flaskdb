@@ -1,0 +1,28 @@
+# --- Taking Base Python
+FROM python:3.8 AS base
+# Create app directory
+WORKDIR /app
+
+# --- Creating Dependencies version
+FROM base AS dependencies
+COPY flaskdb/requirements.txt ./
+# install app dependencies
+RUN pip3 install -r requirements.txt
+
+# --- Copy app file into Dependencies as Build version
+FROM dependencies AS build
+WORKDIR /app
+COPY flaskdb/. /app
+
+# --- Creating Release version
+FROM python:3.8-alpine AS release
+# Create app directory
+WORKDIR /app
+
+COPY --from=dependencies /app/requirements.txt ./
+COPY --from=dependencies /root/.cache /root/.cache
+
+# Install app dependencies
+RUN pip3 install -r requirements.txt
+COPY --from=build /app/ ./
+CMD ["gunicorn", "--config", "gunicorn_config.py", "flaskapp:application"]
