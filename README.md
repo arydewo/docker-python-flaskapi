@@ -7,7 +7,7 @@ Multistage dockerfile to create flaskapi based on the python-flaskapi on https:/
 1. Pull the Dockerfile from this repo
 2. Create folder flaskdb
 3. Pull the python-flaskapi code from the above link into folder flaskdb
-4. Create Python Env file to be used by docker container
+4. Create Python Env file to be used by docker container with name docker.env
    
 
 ```bash
